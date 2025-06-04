@@ -14,4 +14,101 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  role         String
+  password     String
+  phone        String
+  products     Product[]
+  carts        Cart[]
+  checkout     Checkout?
+  transactions Transaction[]
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+}
 
+model Categorie {
+  id         Int       @id @default(autoincrement())
+  name       String
+  products   Product[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+}
+
+model Product {
+  id           Int           @id @default(autoincrement())
+  user         User          @relation(fields: [user_id], references: [id])
+  user_id      Int
+  name         String
+  photo        String?
+  description  String?
+  price        Int
+  weight       Int
+  category     Categorie     @relation(fields: [category_id], references: [id])
+  category_id  Int
+  stock        Int           @default(0)
+  slug         String        @unique
+  keywords     String?
+  cartProducts CartProduct[]
+  is_active    Boolean
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Cart {
+  id           Int           @id @default(autoincrement())
+  user         User          @relation(fields: [user_id], references: [id])
+  user_id      Int
+  address      String
+  total_cost   Int
+  cartProducts CartProduct[]
+  checkout     Checkout?
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+}
+
+model CartProduct {
+  id         Int      @id @default(autoincrement())
+  cart       Cart     @relation(fields: [cart_id], references: [id])
+  cart_id    Int
+  product    Product  @relation(fields: [product_id], references: [id])
+  product_id Int
+  quantity   Int
+  price      Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum CheckoutStatus {
+  PENDING // menunggu approval
+  PAID // success terbayar
+  FAILED // dana tidak masuk
+  CANCELLED // stock habis
+}
+
+model Checkout {
+  id          Int            @id @default(autoincrement())
+  user        User           @relation(fields: [user_id], references: [id])
+  user_id     Int            @unique
+  cart        Cart           @relation(fields: [cart_id], references: [id])
+  cart_id     Int            @unique
+  status      CheckoutStatus
+  invoice     String
+  paid_at     DateTime?
+  transaction Transaction? // One-to-one back relation
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     Int
+  checkout    Checkout @relation(fields: [checkout_id], references: [id])
+  checkout_id Int      @unique
+  total_price Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
