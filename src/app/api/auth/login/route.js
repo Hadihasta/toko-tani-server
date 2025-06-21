@@ -32,7 +32,7 @@ export async function POST(req) {
         const token = generateToken({ id: result.id, role: result.role });
 
         return NextResponse.json(
-          { message: "login Succes", token },
+          { message: "login Succes", name, token },
           {
             status: 200,
           }
