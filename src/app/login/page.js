@@ -28,11 +28,12 @@ const LoginPage = () => {
 
   // Redirect jika sudah login
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!loading && isAuthenticated) {
       const dashboardPath = getDashboardPath();
+      console.log('Redirecting to:', dashboardPath);
       router.push(dashboardPath);
     }
-  }, [isAuthenticated, router, getDashboardPath]);
+  }, [isAuthenticated, loading, router, getDashboardPath]);
 
   const handleLogin = async () => {
     // Validasi input
@@ -42,10 +43,13 @@ const LoginPage = () => {
     }
 
     try {
+      console.log('Attempting login for:', state.name);
       await login({
         name: state.name,
         password: state.password
       });
+      
+      console.log('Login successful, user should be redirected');
       
       // Reset form setelah login berhasil
       dispatch({ type: "RESET" });
@@ -67,6 +71,16 @@ const LoginPage = () => {
     <>
       <div id="login-page">
         <div className=" index-head h-100vh container-sm flex flex-col justify-content-center align-items-center ">
+          {/* Loading overlay */}
+          {loading && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 flex items-center space-x-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
+                <span>Memproses...</span>
+              </div>
+            </div>
+          )}
+
           <div>
             <motion.div
               initial={{ y: -100, opacity: 0 }}
@@ -142,7 +156,7 @@ const LoginPage = () => {
               text="Log in" 
               onClick={handleLogin}
               loading={loading}
-              disabled={!state.name.trim() || !state.password.trim()}
+              disabled={!state.name.trim() || !state.password.trim() || loading}
             />
           </div>
 

@@ -1,10 +1,32 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { authService } from '@/services/api';
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const initializeAuth = () => {
+      const token = localStorage.getItem('token');
+      const savedUser = localStorage.getItem('user');
+      
+      if (token && savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          setUser(userData);
+        } catch (err) {
+          console.error('Error parsing saved user:', err);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        }
+      }
+      setLoading(false);
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = useCallback(async (credentials) => {
     setLoading(true);
@@ -13,14 +35,11 @@ export const useAuth = () => {
     try {
       const response = await authService.login(credentials);
       
-      // Simpan token dan data user ke localStorage
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
       
-      // Simpan token ke cookie untuk middleware
       document.cookie = `token=${response.token}; path=/; max-age=${60 * 60 * 24}; SameSite=Strict`;
       
-      // Update state
       setUser(response.user);
       
       return response;
@@ -40,7 +59,6 @@ export const useAuth = () => {
       setUser(null);
       setError(null);
       
-      // Hapus token dari localStorage dan cookie
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
@@ -62,7 +80,6 @@ export const useAuth = () => {
         setUser(userData);
         return userData;
       } catch (err) {
-        // Token tidak valid, hapus dari localStorage dan cookie
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
@@ -76,7 +93,6 @@ export const useAuth = () => {
     return null;
   }, []);
 
-  // Fungsi untuk mendapatkan path dashboard berdasarkan role
   const getDashboardPath = useCallback(() => {
     if (!user) return '/login';
     
