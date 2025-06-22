@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma"; // Menggunakan instance prisma dari file terpusat
 import bcrypt from "bcrypt";
-
-const prisma = new PrismaClient();
 
 // POST /api/auth/register - Handle user registration
 export async function POST(request) {
