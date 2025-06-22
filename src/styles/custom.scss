@@ -1,0 +1,71 @@
+@import "bootstrap/scss/bootstrap";
+// 390 x 844  iphone 12
+$softPrimary: #f9f0d9;
+
+$theme-colors: (
+  "softPrimary": $softPrimary,
+  "greenSurface": "#637F27",
+  "greenPrimary": "#9DD428",
+);
+
+// background color
+.bg-softPrimary {
+  background-color: $softPrimary;
+}
+
+// font size
+.fs-20 {
+  font-size: 20px;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+// font weight
+.fw-300 {
+  font-weight: 300;
+}
+.fw-400 {
+  font-weight: 400;
+}
+.fw-700 {
+  font-weight: 700;
+}
+
+// color
+.text-greenSurface {
+  color: #637f27;
+}
+.text-greenPrimary {
+  color: #9dd428;
+}
+
+// padding
+
+// margin
+.mbp-60 {
+  margin-bottom: 60%;
+}
+
+// *---- SCREEN ----*
+
+@media (min-width: 576px) {
+  .mbp-sm-20 {
+    margin-bottom: 20%;
+  }
+}
+
+// Height
+.h-100vh {
+  height: 100vh !important;
+}
+
+.h-50vh {
+  height: 50vh !important;
+}
+$font-family-base: "Fustat", Arial, sans-serif;
+
+body {
+  font-family: $font-family-base;
+}
