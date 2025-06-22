@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useReducer, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 const initialState = { name: "", password: "" };
 
@@ -142,6 +143,13 @@ const LoginPage = () => {
               loading={loading}
               disabled={!state.name.trim() || !state.password.trim()}
             />
+          </div>
+
+          <div className="text-center mt-4 text-sm">
+            <span className="text-gray-600">Belum punya akun? </span>
+            <Link href="/register" className="font-medium text-green-600 hover:underline">
+              Daftar sekarang
+            </Link>
           </div>
         </div>
       </div>

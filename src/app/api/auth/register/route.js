@@ -1,39 +1,82 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { hashPassword } from "@/lib/bcrypt.js";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
-export async function POST(req) {
-  const body = await req.json();
-  const { name, role, password, phone } = body;
-  if (!name || !phone || !password) {
-    return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
-  }
+const prisma = new PrismaClient();
 
-  const result = await prisma.user.findFirst({
-    where: {
-      name: name,
-    },
-  });
+// POST /api/auth/register - Handle user registration
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { name, password, phone } = body;
 
-  if (result) {
+    // 1. Validasi input dasar
+    if (!name || !password || !phone) {
+      return NextResponse.json(
+        { error: "Nama, password, dan nomor telepon wajib diisi." },
+        { status: 400 }
+      );
+    }
+    
+    if (password.length < 6) {
+        return NextResponse.json(
+            { error: "Password minimal harus 6 karakter." },
+            { status: 400 }
+        );
+    }
+
+    // 2. Cek apakah user sudah ada (berdasarkan nama atau telepon)
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { name: { equals: name, mode: "insensitive" } },
+          { phone: phone }
+        ],
+      },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "Nama atau nomor telepon sudah terdaftar." },
+        { status: 409 } // 409 Conflict
+      );
+    }
+
+    // 3. Hash password sebelum disimpan
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 4. Buat user baru dengan role default 'user'
+    const user = await prisma.user.create({
+      data: {
+        name,
+        password: hashedPassword,
+        phone,
+        role: "user", // Role default untuk pengguna yang mendaftar
+      },
+      // Jangan kembalikan password di response
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        role: true,
+        created_at: true,
+      }
+    });
+
     return NextResponse.json(
-      { message: "nama sudah digunakan", result },
-      { status: 400 }
+        {
+            success: true,
+            message: "Registrasi berhasil! Silakan login.",
+            data: user
+        },
+        { status: 201 }
+    );
+
+  } catch (error) {
+    console.error("Registration error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
-
-  const bcryptPassword = await hashPassword(password);
-  const user = await prisma.user.create({
-    data: {
-      name: name,
-      role: role,
-      phone: phone,
-      password: bcryptPassword,
-    },
-  });
-
-  return NextResponse.json(
-    { message: "Berhasil register", user },
-    { status: 201 }
-  );
 }
