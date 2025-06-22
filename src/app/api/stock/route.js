@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import prisma from "@/lib/prisma";
 import { verifyToken } from '@/lib/auth';
-
-const prisma = new PrismaClient();
 
 // GET /api/stock - Get all stocks
 export async function GET(request) {

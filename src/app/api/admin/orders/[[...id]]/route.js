@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { verifyToken } from '@/lib/auth';
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
+import { verifyToken } from '@/lib/jwt';
 
 // GET /api/admin/orders - Get all orders for admin
 export async function GET(request) {

@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { verifyToken } from '@/lib/auth';
-import { promises as fs } from 'fs';
-import path from 'path';
 import formidable from 'formidable';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma'; // Menggunakan instance prisma dari file terpusat
+import { verifyToken } from '@/lib/jwt';
+import fs from 'fs';
+import path from 'path';
 
 // Menonaktifkan bodyParser default dari Next.js agar formidable bisa bekerja
 export const config = {
@@ -25,17 +23,17 @@ const parseForm = (req) => {
 };
 
 const saveFile = async (file) => {
-  const data = await fs.readFile(file.filepath);
+  const data = await fs.promises.readFile(file.filepath);
   const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'proofs');
   
   // Membuat direktori jika belum ada
-  await fs.mkdir(uploadDir, { recursive: true });
+  await fs.promises.mkdir(uploadDir, { recursive: true });
   
   const fileName = `${Date.now()}-${file.originalFilename}`;
   const filePath = path.join(uploadDir, fileName);
   
-  await fs.writeFile(filePath, data);
-  await fs.unlink(file.filepath); // Hapus file sementara
+  await fs.promises.writeFile(filePath, data);
+  await fs.promises.unlink(file.filepath); // Hapus file sementara
   
   return `/uploads/proofs/${fileName}`; // Mengembalikan path yang bisa diakses publik
 };

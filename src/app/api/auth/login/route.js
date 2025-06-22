@@ -21,32 +21,35 @@ export async function POST(req) {
       },
     });
 
-    if (result) {
-      const checkPassword = await comparePassword(password, result.password);
-      if (!checkPassword) {
-        return NextResponse.json(
-          { error: "Invalid credentials" },
-          { status: 401 }
-        );
-      } else {
-        const token = generateToken({ id: result.id, role: result.role });
-
-        return NextResponse.json(
-          { message: "login Succes", name, token },
-          {
-            status: 200,
-          }
-        );
-      }
-    } else {
-      throw error;
+    if (!result) {
+      return NextResponse.json(
+        { error: "Nama belum didaftarkan" },
+        { status: 400 }
+      );
     }
-  } catch (error) {
+
+    const checkPassword = await comparePassword(password, result.password);
+    if (!checkPassword) {
+      return NextResponse.json(
+        { error: "Password salah" },
+        { status: 401 }
+      );
+    }
+
+    const token = generateToken({ id: result.id, role: result.role });
+
     return NextResponse.json(
-      { message: "nama belum didaftarkan" },
+      { message: "Login berhasil", name, token },
       {
-        status: 400,
+        status: 200,
       }
+    );
+
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
 }
