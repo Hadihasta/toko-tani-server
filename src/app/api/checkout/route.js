@@ -103,8 +103,7 @@ export async function POST(request) {
           total_price: cartData.total,
           user: { connect: { id: userId } },
           checkout: { connect: { id: checkout.id } },
-          // Simpan URL bukti pembayaran di sini jika model Transaction punya kolomnya
-          // Contoh: payment_proof_url: paymentProofUrl
+          paymentProofUrl: paymentProofUrl
         }
       });
 

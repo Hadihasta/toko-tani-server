@@ -85,6 +85,8 @@ enum CheckoutStatus {
   PAID // success terbayar
   FAILED // dana tidak masuk
   CANCELLED // stock habis
+  APPROVED // Disetujui, siap dikirim
+  REJECTED // Ditolak oleh admin
 }
 
 model Checkout {
@@ -93,8 +95,9 @@ model Checkout {
   user_id     Int            @unique
   cart        Cart           @relation(fields: [cart_id], references: [id])
   cart_id     Int            @unique
-  status      CheckoutStatus
+  status      CheckoutStatus @default(PENDING)
   invoice     String
+  notes       String? // Catatan dari admin, mis. alasan penolakan
   paid_at     DateTime?
   transaction Transaction? // One-to-one back relation
   created_at  DateTime       @default(now())
@@ -102,12 +105,13 @@ model Checkout {
 }
 
 model Transaction {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [user_id], references: [id])
-  user_id     Int
-  checkout    Checkout @relation(fields: [checkout_id], references: [id])
-  checkout_id Int      @unique
-  total_price Int
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  user             User     @relation(fields: [user_id], references: [id])
+  user_id          Int
+  checkout         Checkout @relation(fields: [checkout_id], references: [id])
+  checkout_id      Int      @unique
+  total_price      Int
+  paymentProofUrl  String?  // URL untuk menyimpan bukti transfer
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 }
