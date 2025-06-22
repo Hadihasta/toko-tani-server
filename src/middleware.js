@@ -1,69 +1,128 @@
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/lib/jwt";
 
-const protectedRoutes = ["/api/protected"];
-
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get('token')?.value;
-
+  
   // Definisikan rute yang ingin dilindungi
   const protectedAdminRoutes = ['/admin'];
-  const protectedUserRoutes = ['/profile', '/checkout'];
+  const protectedUserRoutes = ['/user', '/profile', '/checkout'];
+  const protectedDashboardRoutes = ['/dashboard'];
 
   const isProtectedRoute = 
     protectedAdminRoutes.some(path => pathname.startsWith(path)) ||
-    protectedUserRoutes.some(path => pathname.startsWith(path));
+    protectedUserRoutes.some(path => pathname.startsWith(path)) ||
+    protectedDashboardRoutes.some(path => pathname.startsWith(path));
   
   // Jika bukan rute yang dilindungi, lanjutkan
   if (!isProtectedRoute) {
     return NextResponse.next();
   }
 
+  // Cek token dari Authorization header (untuk API routes) atau cookie (untuk pages)
+  let token = null;
+  
+  if (pathname.startsWith('/api/')) {
+    // Untuk API routes, ambil dari Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+  } else {
+    // Untuk pages, ambil dari cookie
+    token = request.cookies.get('token')?.value;
+  }
+
   // Jika tidak ada token, redirect ke login
   if (!token) {
-    const url = new URL('/login', request.url);
-    url.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(url);
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: "Token tidak ditemukan" },
+        { status: 401 }
+      );
+    } else {
+      const url = new URL('/login', request.url);
+      url.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(url);
+    }
   }
 
   try {
     // Verifikasi token
-    const decoded = await verifyToken(request);
-    if (!decoded.success) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
       throw new Error('Token tidak valid');
     }
 
     // Cek role untuk rute admin
     if (protectedAdminRoutes.some(path => pathname.startsWith(path))) {
-      if (decoded.user.role !== 'admin') {
-        const url = new URL('/unauthorized', request.url); // Buat halaman unauthorized
-        return NextResponse.redirect(url);
+      if (decoded.role !== 'admin') {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json(
+            { error: "Akses ditolak" },
+            { status: 403 }
+          );
+        } else {
+          const url = new URL('/unauthorized', request.url);
+          return NextResponse.redirect(url);
+        }
+      }
+    }
+
+    // Cek role untuk rute user
+    if (protectedUserRoutes.some(path => pathname.startsWith(path))) {
+      if (decoded.role !== 'user') {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json(
+            { error: "Akses ditolak" },
+            { status: 403 }
+          );
+        } else {
+          const url = new URL('/unauthorized', request.url);
+          return NextResponse.redirect(url);
+        }
       }
     }
     
     // Jika semua validasi lolos, lanjutkan ke rute yang diminta
     const response = NextResponse.next();
+    
     // Menyematkan data user ke header request agar bisa diakses di API route jika perlu
-    response.headers.set('x-user-id', decoded.user.id);
-    response.headers.set('x-user-role', decoded.user.role);
+    response.headers.set('x-user-id', decoded.id.toString());
+    response.headers.set('x-user-role', decoded.role);
     
     return response;
 
   } catch (err) {
     console.error('Middleware error:', err);
-    // Jika token tidak valid, hapus cookie dan redirect ke login
-    const url = new URL('/login', request.url);
-    url.searchParams.set('redirect', pathname);
-    const response = NextResponse.redirect(url);
-    response.cookies.delete('token');
-    return response;
+    
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: "Token tidak valid" },
+        { status: 401 }
+      );
+    } else {
+      // Jika token tidak valid, hapus cookie dan redirect ke login
+      const url = new URL('/login', request.url);
+      url.searchParams.set('redirect', pathname);
+      const response = NextResponse.redirect(url);
+      response.cookies.delete('token');
+      return response;
+    }
   }
 }
 
-// Hanya untuk route API tertentu
+// Konfigurasi matcher untuk middleware
 export const config = {
-  matcher: ['/admin/:path*', '/profile/:path*', '/checkout'],
+  matcher: [
+    '/admin/:path*', 
+    '/user/:path*', 
+    '/dashboard/:path*',
+    '/profile/:path*', 
+    '/checkout/:path*',
+    '/api/admin/:path*',
+    '/api/user/:path*'
+  ],
 };
 
 // contoh endpoint api/protected/route.js

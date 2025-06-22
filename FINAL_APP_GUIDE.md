@@ -129,3 +129,300 @@ Meskipun belum diimplementasikan sepenuhnya, fondasi untuk unit testing dapat di
 - **Deployment**: Siapkan aplikasi untuk production build (`npm run build`) dan hosting di platform seperti Vercel atau Netlify.
 
 Aplikasi ini sekarang berada dalam kondisi yang sangat solid, fungsional, dan mengikuti praktik terbaik pengembangan modern. 
+
+# Toko Tani - E-commerce Platform Guide
+
+## Overview
+Toko Tani adalah platform e-commerce lengkap yang menghubungkan petani (supplier) dengan pembeli. Aplikasi ini memiliki dua role utama: **User (Petani)** dan **Admin**, masing-masing dengan dashboard dan fitur yang berbeda.
+
+## 🏗️ Architecture & Tech Stack
+
+### Frontend
+- **Next.js 15** dengan App Router
+- **React 18** dengan hooks dan functional components
+- **Tailwind CSS** untuk styling
+- **Framer Motion** untuk animasi
+- **React Hook Form** + **Zod** untuk validasi form
+- **Tabler Icons** untuk iconography
+
+### Backend
+- **Next.js API Routes** untuk backend
+- **Prisma ORM** untuk database management
+- **MySQL** sebagai database
+- **JWT** untuk authentication
+- **bcryptjs** untuk password hashing
+- **Formidable** untuk file upload
+
+### Database Schema
+- **User**: Petani dan admin
+- **Product**: Produk pertanian
+- **Category**: Kategori produk
+- **Cart**: Keranjang belanja
+- **Checkout**: Proses checkout dengan status
+- **Transaction**: Transaksi pembayaran
+
+## 🔐 Authentication & Authorization
+
+### Login Flow
+1. User mengakses `/login`
+2. Input username dan password
+3. Backend memverifikasi credentials
+4. JWT token dibuat dan disimpan di localStorage + cookie
+5. User diarahkan ke dashboard sesuai role:
+   - **Admin** → `/admin/dashboard`
+   - **User** → `/user/dashboard`
+
+### Role-Based Access Control
+- **Admin**: Akses penuh ke semua fitur admin
+- **User**: Akses terbatas ke fitur petani
+- **Middleware** melindungi route berdasarkan role
+
+### Protected Routes
+- `/admin/*` - Hanya untuk admin
+- `/user/*` - Hanya untuk user
+- `/dashboard` - Redirect berdasarkan role
+- `/checkout` - Hanya untuk user yang login
+
+## 📊 Dashboard System
+
+### User Dashboard (`/user/dashboard`)
+**Fitur untuk Petani:**
+- Statistik produk dan penjualan
+- Manajemen produk (tambah, edit, hapus)
+- Monitoring pesanan (pending, selesai)
+- Akses ke toko publik
+
+**Statistik yang Ditampilkan:**
+- Total produk yang dimiliki
+- Total penjualan
+- Pesanan pending
+- Pesanan selesai
+
+### Admin Dashboard (`/admin/dashboard`)
+**Fitur untuk Admin:**
+- Overview sistem keseluruhan
+- Manajemen pesanan (approve/reject)
+- Manajemen produk dan kategori
+- Laporan penjualan dan user
+
+**Statistik yang Ditampilkan:**
+- Total users (petani)
+- Total produk
+- Total pesanan
+- Total revenue
+- Pesanan pending
+- Pesanan selesai
+
+## 🛒 E-commerce Flow
+
+### Customer Journey
+1. **Browse Products** (`/menu`)
+   - Lihat produk tanpa login
+   - Filter berdasarkan kategori
+   - Tambah ke keranjang
+
+2. **Shopping Cart** (`/cart`)
+   - Review produk yang dipilih
+   - Update quantity
+   - Lihat total harga
+
+3. **Checkout** (`/checkout`)
+   - Login required
+   - Upload bukti pembayaran
+   - Konfirmasi pesanan
+
+4. **Order Success** (`/order-success`)
+   - Konfirmasi pesanan berhasil
+   - Menunggu approval admin
+
+### Admin Order Management
+1. **View Orders** (`/admin/orders`)
+   - Lihat semua pesanan
+   - Filter berdasarkan status
+
+2. **Order Details**
+   - Lihat detail customer
+   - Lihat produk yang dipesan
+   - Lihat bukti pembayaran
+
+3. **Approve/Reject**
+   - Approve: Stock berkurang, status jadi PAID
+   - Reject: Stock kembali, status jadi REJECTED
+
+## 🔧 API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/register` - Register user baru
+
+### Public APIs
+- `GET /api/public/stock` - Get semua produk (public)
+
+### User APIs
+- `GET /api/user/stats` - Get statistik user dashboard
+- `GET /api/user/products` - Get produk user
+- `POST /api/user/products` - Tambah produk baru
+
+### Admin APIs
+- `GET /api/admin/stats` - Get statistik admin dashboard
+- `GET /api/admin/orders` - Get semua pesanan
+- `PUT /api/admin/orders/[id]` - Update status pesanan
+
+### Checkout
+- `POST /api/checkout` - Proses checkout dengan bukti pembayaran
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- MySQL database
+- Git
+
+### Installation
+```bash
+# Clone repository
+git clone <repository-url>
+cd toko-tani-server
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp ENV_EXAMPLE .env.local
+# Edit .env.local dengan konfigurasi database dan JWT secret
+
+# Setup database
+npx prisma generate
+npx prisma db push
+
+# Run development server
+npm run dev
+```
+
+### Environment Variables
+```env
+DATABASE_URL="mysql://user:password@localhost:3306/toko_tani"
+NODE_ENV="development"
+JWT_SECRET="your-super-secret-jwt-key"
+NEXT_PUBLIC_API_URL="http://localhost:3000/api"
+```
+
+## 📁 Project Structure
+```
+src/
+├── app/
+│   ├── admin/           # Admin dashboard & features
+│   ├── user/            # User dashboard & features
+│   ├── api/             # API routes
+│   ├── login/           # Login page
+│   ├── register/        # Register page
+│   ├── menu/            # Public product catalog
+│   ├── cart/            # Shopping cart
+│   ├── checkout/        # Checkout process
+│   └── order-success/   # Order confirmation
+├── components/          # Reusable components
+├── hooks/              # Custom React hooks
+├── lib/                # Utility libraries
+├── services/           # API services
+└── styles/             # Global styles
+```
+
+## 🔒 Security Features
+
+### Authentication
+- JWT token dengan expiration
+- Password hashing dengan bcrypt
+- Token disimpan di localStorage + cookie
+
+### Authorization
+- Role-based access control
+- Middleware protection untuk semua route
+- API endpoint protection
+
+### Data Validation
+- Server-side validation dengan Prisma
+- Client-side validation dengan Zod
+- Input sanitization
+
+## 🎨 UI/UX Features
+
+### Design System
+- Consistent color scheme (green theme)
+- Responsive design
+- Smooth animations dengan Framer Motion
+- Modern card-based layout
+
+### User Experience
+- Loading states
+- Error handling
+- Success feedback
+- Intuitive navigation
+
+## 🧪 Testing & Quality
+
+### Code Quality
+- ESLint configuration
+- Prettier formatting
+- TypeScript-like structure dengan JSDoc
+
+### Best Practices
+- Component reusability
+- Custom hooks untuk logic separation
+- Service layer untuk API calls
+- Error boundary implementation
+
+## 🚀 Deployment
+
+### Production Build
+```bash
+npm run build
+npm start
+```
+
+### Environment Setup
+- Set `NODE_ENV=production`
+- Configure production database
+- Set secure JWT secret
+- Configure domain URLs
+
+## 📈 Future Enhancements
+
+### Planned Features
+- Real-time notifications
+- Payment gateway integration
+- Advanced reporting
+- Mobile app
+- Email notifications
+- Product reviews & ratings
+
+### Performance Optimizations
+- Image optimization
+- Code splitting
+- Caching strategies
+- Database indexing
+
+## 🤝 Contributing
+
+### Development Workflow
+1. Create feature branch
+2. Implement changes
+3. Test thoroughly
+4. Update documentation
+5. Submit pull request
+
+### Code Standards
+- Follow existing code style
+- Add proper comments
+- Update documentation
+- Include error handling
+
+## 📞 Support
+
+Untuk pertanyaan atau masalah:
+1. Check documentation
+2. Review existing issues
+3. Create new issue dengan detail lengkap
+
+---
+
+**Toko Tani** - Empowering farmers through digital commerce 🚀 

@@ -49,7 +49,7 @@ export const authService = {
       const response = await apiClient.post('/auth/login', credentials);
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Login gagal');
+      throw new Error(error.response?.data?.error || error.response?.data?.message || 'Login gagal');
     }
   },
   
@@ -68,7 +68,7 @@ export const authService = {
       const response = await apiClient.get('/auth/me');
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Gagal mengambil data user');
+      throw new Error(error.response?.data?.error || error.response?.data?.message || 'Gagal mengambil data user');
     }
   }
 };

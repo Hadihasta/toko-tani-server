@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key-fallback";
 
 export function generateToken(payload) {
   return jwt.sign(
     payload,
     SECRET_KEY,
-    { expiresIn: "1d" },
-    { algorithm: "RS256" }
+    { expiresIn: "1d" }
   ); // valid 1 hari
 }
 

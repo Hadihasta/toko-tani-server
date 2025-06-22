@@ -23,15 +23,16 @@ const reducer = (state, action) => {
 
 const LoginPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { login, loading, error, isAuthenticated } = useAuth();
+  const { login, loading, error, isAuthenticated, getDashboardPath } = useAuth();
   const router = useRouter();
 
   // Redirect jika sudah login
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard'); // atau halaman yang sesuai
+      const dashboardPath = getDashboardPath();
+      router.push(dashboardPath);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, getDashboardPath]);
 
   const handleLogin = async () => {
     // Validasi input
@@ -42,7 +43,7 @@ const LoginPage = () => {
 
     try {
       await login({
-        username: state.name,
+        name: state.name,
         password: state.password
       });
       
