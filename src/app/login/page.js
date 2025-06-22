@@ -1,14 +1,15 @@
 "use client";
 import Image from "next/image";
-import ButtonLink from "@/components/buttonLink.jsx";
+import Button from "@/components/Button.jsx";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const initialState = { name: "", password: "" };
 
 const reducer = (state, action) => {
-  console.log(state, action, " <<<<< ");
   switch (action.type) {
     case "CHANGE":
       return { ...state, [action.field]: action.value };
@@ -21,6 +22,45 @@ const reducer = (state, action) => {
 
 const LoginPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { login, loading, error, isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Redirect jika sudah login
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard'); // atau halaman yang sesuai
+    }
+  }, [isAuthenticated, router]);
+
+  const handleLogin = async () => {
+    // Validasi input
+    if (!state.name.trim() || !state.password.trim()) {
+      alert('Username dan password harus diisi!');
+      return;
+    }
+
+    try {
+      await login({
+        username: state.name,
+        password: state.password
+      });
+      
+      // Reset form setelah login berhasil
+      dispatch({ type: "RESET" });
+      
+      // Redirect akan dilakukan oleh useEffect di atas
+    } catch (err) {
+      // Error sudah ditangani oleh useAuth hook
+      console.error('Login error:', err);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <>
       <div id="login-page">
@@ -48,6 +88,18 @@ const LoginPage = () => {
           </div>
 
           <div className="form-wrapper pt-5">
+            {/* Error message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="alert alert-danger mb-3"
+                role="alert"
+              >
+                {error}
+              </motion.div>
+            )}
+
             <div>
               <Input
                 placeholder="Username"
@@ -60,6 +112,8 @@ const LoginPage = () => {
                     value: e.target.value,
                   })
                 }
+                onKeyPress={handleKeyPress}
+                disabled={loading}
               />
             </div>
             <div className="pt-3">
@@ -73,14 +127,21 @@ const LoginPage = () => {
                     value: e.target.value,
                   })
                 }
+                onKeyPress={handleKeyPress}
                 type="password"
                 placeholder="Password"
+                disabled={loading}
               />
             </div>
           </div>
 
           <div style={{ zIndex: 1 }} className="button-wrapper pt-3">
-            <ButtonLink href="" text="Log in" />
+            <Button 
+              text="Log in" 
+              onClick={handleLogin}
+              loading={loading}
+              disabled={!state.name.trim() || !state.password.trim()}
+            />
           </div>
         </div>
       </div>
