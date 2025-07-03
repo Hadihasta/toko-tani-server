@@ -17,7 +17,7 @@ export default function ButtonLink({ href, text }) {
           delay: 0.3,
         }}
       >
-        <Link href={href}>
+        <Link href={href} >
           <button className="py-2 px-4 rounded-4 bg-softPrimary text-greenPrimary fw-700">
             {text}
           </button>
