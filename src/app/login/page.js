@@ -1,10 +1,11 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import ButtonLink from '@/components/buttonLink.jsx'
 import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { useReducer } from 'react'
 import axios from '@/lib/axios'
+import { toast } from 'sonner'
 
 const initialCredential = { name: '', password: '' }
 
@@ -18,29 +19,56 @@ const loginCredentialReducer = (state, action) => {
       return state
   }
 }
-
 const LoginPage = () => {
+  const router = useRouter()
   const [setCredential, setCredentialDispatch] = useReducer(loginCredentialReducer, initialCredential)
 
   const handleLogin = async () => {
     const { name, password } = setCredential
-    console.log(setCredential, ' <<< ')
-    // if (!name || !password) {
-    //   alert("Harap isi username dan password.");
-    //   return;
-    // }
+
+    const body = {
+      name,
+      password,
+    }
+
+    let message = ''
+
+    if (!name || !password) {
+      message = 'Harap isi Username dan Password.'
+      toast(message, {
+        style: {
+          backgroundColor: '#ffa2a2',
+          color: '#e7000b',
+          border: '#460809',
+        },
+      })
+      return
+    }
 
     try {
-     const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, setCredential);
-      // console.log("Login berhasil", res.data);
-      // localStorage.setItem("token", res.data.token);
-
-      // redirect ke halaman dashboard user
-      // window.location.href = "/user/dashboard";
-      console.log(res)
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, body)
+      if (res.data.status_code === 200) {
+        let message = res.data.message
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('id_user', res.data.id_user)
+        router.push('/dashboard')
+        toast(message, {
+          style: {
+            backgroundColor: '#b9f8cf',
+            color: '#009966',
+            border: '#05df72',
+          },
+        })
+      }
     } catch (error) {
-      console.log(error , " << ")
-      // alert(error.response?.data?.message || "Login gagal. Coba lagi.");
+      let message = error.response.data.error
+      toast(message, {
+        style: {
+          backgroundColor: '#ffa2a2',
+          color: '#e7000b',
+          border: '#460809',
+        },
+      })
     }
   }
 
