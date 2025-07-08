@@ -48,9 +48,9 @@ const LoginPage = () => {
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, body)
       if (res.data.status_code === 200) {
-        console.log(res.data.status_code, ' <<')
         let message = res.data.message
         localStorage.setItem('token', res.data.token)
+        localStorage.setItem('id_user', res.data.id_user)
         router.push('/dashboard')
         toast(message, {
           style: {

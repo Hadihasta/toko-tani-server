@@ -1,16 +1,36 @@
-@import "bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap';
 // 390 x 844  iphone 12
 $softPrimary: #f9f0d9;
+$yellowBackground: #e7b33a;
+$greenSecondary: #f2ffd7;
+$greenThird: #176200;
+$yellowCard: #F7EFD7;
 
 $theme-colors: (
-  "softPrimary": $softPrimary,
-  "greenSurface": "#637F27",
-  "greenPrimary": "#9DD428",
+  'softPrimary': $softPrimary,
+  'greenSurface': '#637F27',
+  'greenPrimary': '#9DD428',
+  'yellowBackground': $yellowBackground,
+  'yellowCard': $yellowCard,
+  'greenSecondary': $greenSecondary,
+  'greenThird': $greenThird,
 );
 
 // background color
 .bg-softPrimary {
   background-color: $softPrimary;
+}
+.bg-yellowBackground {
+  background-color: $yellowBackground;
+}
+.bg-yellowCard {
+  background-color: $yellowCard;
+}
+.bg-successButton {
+  background-color: #57BE38;
+}
+.bg-errorButton {
+  background-color: #E55858;
 }
 
 // font size
@@ -41,6 +61,13 @@ $theme-colors: (
   color: #9dd428;
 }
 
+.text-greenSecondary {
+  color: $greenSecondary;
+}
+.text-greenThird {
+  color: $greenThird;
+}
+
 // padding
 
 // margin
@@ -64,7 +91,7 @@ $theme-colors: (
 .h-50vh {
   height: 50vh !important;
 }
-$font-family-base: "Fustat", Arial, sans-serif;
+$font-family-base: 'Fustat', Arial, sans-serif;
 
 body {
   font-family: $font-family-base;
