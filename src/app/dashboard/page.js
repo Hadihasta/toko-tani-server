@@ -1,7 +1,7 @@
 import QueryProvider from '../providers/QueryProvider'
 import Image from 'next/image'
 import ProductsClient from './ProductsClient'
-import MenuNavigate from '@/components/dashboard/menuNavigate.jsx'
+import MenuNavigate from '@/components/dashboard/menuNavigate'
 
 // Aboout this page : SSR for the firs render
 
@@ -28,7 +28,7 @@ const DashboardPage = async ({ searchParams }) => {
         className="flex flex-col"
         style={{ height: '100%' }}
       >
-        <div className="content-wrapper overflow-x-visible flex-grow-1 px-4 overflow-scroll">
+        <div className="content-wrapper px-4   flex-grow-1  overflow-x-visible overflow-scroll ">
           <div className="head-wrapper relative">
             <div
               className="d-flex bg-yellowBackground"

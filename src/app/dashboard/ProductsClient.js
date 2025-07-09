@@ -4,15 +4,10 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRef, useCallback } from 'react'
 import ProductCard from '@/components/product/productCard'
 
-
+import { useRouter } from 'next/navigation'
 
 export default function ProductsClient({ initialData, initialPage, limit }) {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage
-  } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['products'],
     queryFn: async ({ pageParam = Number(initialPage) }) => {
       const res = await fetch(
@@ -48,15 +43,14 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
     },
     [isFetchingNextPage, fetchNextPage, hasNextPage]
   )
+  const router = useRouter()
 
   return (
     <div>
       <div className="grid grid-cols-2 gap-4">
         {data.pages.flatMap((page, i) =>
           page.data.map((product, index) => {
-            const isLastProduct =
-              i === data.pages.length - 1 &&
-              index === page.data.length - 1
+            const isLastProduct = i === data.pages.length - 1 && index === page.data.length - 1
 
             return (
               <div
@@ -64,17 +58,13 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
                 ref={isLastProduct ? lastProductRef : null}
               >
                 <ProductCard product={product} />
-     
               </div>
             )
           })
         )}
-
       </div>
 
       {isFetchingNextPage && <p>Loading more...</p>}
     </div>
   )
 }
-
-
