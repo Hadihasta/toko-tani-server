@@ -3,8 +3,7 @@ import Image from "next/image";
 import ButtonLink from "@/components/buttonLink.jsx";
 import { motion } from "framer-motion";
 
-// import { IconArrowLeft } from "@tabler/icons-react";
-/* <IconArrowLeft size="100" className="bg-primary" /> */
+
 export default function Home() {
   return (
     <div>

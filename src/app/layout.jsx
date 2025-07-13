@@ -3,6 +3,7 @@ import '../styles/custom.scss'
 import { Toaster } from '@/components/ui/sonner'
 
 
+
 export const metadata = {
   title: 'Tani Permana',
   description: 'Best online shop',
