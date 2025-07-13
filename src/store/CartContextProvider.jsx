@@ -65,7 +65,6 @@ export default function CartContextProvider({ children }) {
     try {
       const token = localStorage.getItem('token')
 
-      console.log('request ganti')
 
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/create-cart`,
@@ -79,7 +78,6 @@ export default function CartContextProvider({ children }) {
         }
       )
 
-      console.log(res, '>>>> fetch')
     } catch (err) {
       console.error('Update cart failed:', err)
     }
