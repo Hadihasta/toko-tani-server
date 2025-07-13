@@ -9,7 +9,7 @@ export default function MenuNavigate() {
   const {items, addItemToCart}= useContext(CartContext)
 
 
-  console.log(items ,  "<<<<" )
+  // console.log(items ,  "<<<<" )
   const router = useRouter()
 
   const handleSection = (section) => {
@@ -55,8 +55,8 @@ export default function MenuNavigate() {
               {/* default like this 'cartCtx.items.length */}
               {items.length > 0 && (
                 <div
-                  className="rounded-circle bg-danger flex justify-center"
-                  style={{ Height: '20px', width: '20px', position: 'relative', bottom: '-40px' }}
+                  className="rounded-circle bg-greenSecondary flex justify-center border border-success border-3 fw-bold"
+                  style={{  width: '30px', position: 'relative', bottom: '-40px' }}
                 >
                  {items.length }
                 </div>

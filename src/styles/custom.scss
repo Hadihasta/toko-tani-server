@@ -4,7 +4,7 @@ $softPrimary: #f9f0d9;
 $yellowBackground: #e7b33a;
 $greenSecondary: #f2ffd7;
 $greenThird: #176200;
-$yellowCard: #F7EFD7;
+$yellowCard: #f7efd7;
 
 $theme-colors: (
   'softPrimary': $softPrimary,
@@ -27,10 +27,13 @@ $theme-colors: (
   background-color: $yellowCard;
 }
 .bg-successButton {
-  background-color: #57BE38;
+  background-color: #57be38;
 }
 .bg-errorButton {
-  background-color: #E55858;
+  background-color: #e55858;
+}
+.bg-greenSecondary {
+  background-color: $greenSecondary;
 }
 
 // font size

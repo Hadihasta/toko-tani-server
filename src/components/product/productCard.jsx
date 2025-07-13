@@ -3,10 +3,9 @@ import { CartContext } from '@/store/CartContextProvider'
 import { IconCirclePlus, IconCircleMinus } from '@tabler/icons-react'
 
 const ProductCard = ({ product }) => {
-  // const cartCtx = useContext(CartContext) <========= first like this but we upgrade with pulling destructure the value we declare
-  const {items, addItemToCart}= useContext(CartContext)
+  const { items, addItemToCart , removeItemFromCart} = useContext(CartContext)
 
-
+  // console.log(items, ' <<<< ')
 
   return (
     <>
@@ -23,14 +22,23 @@ const ProductCard = ({ product }) => {
                 className="w-full object-contain "
                 style={{ minHeight: '80px', maxHeight: '120px' }}
               />
-              <div id='counter'>
-                {/* default like this 'cartCtx.items.length */}
-                {items.length > 0 &&  <div
-                  className="rounded-circle bg-danger flex justify-center"
-                  style={{ Height: '20px', width: '20px', position: 'relative', left: '-10px', top: '-10px' }}
-                >
-                 {items.length }
-                </div>}
+              <div id="counter">
+                <div>
+                  {items.map((item) => {
+                    if (item.id === product.id) {
+                      const quantity = item.quantity
+                      return (
+                        <div
+                          key={item.id}
+                          className="rounded-circle bg-greenSecondary flex justify-center border border-success border-3 fw-bold"
+                          style={{  width: '30px', position: 'relative', left: '-10px', top: '-10px' }}
+                        >
+                          {quantity}
+                        </div>
+                      )
+                    }
+                  })}
+                </div>
               </div>
             </div>
             <div
@@ -43,7 +51,9 @@ const ProductCard = ({ product }) => {
           </div>
           <div className="action-wrapper flex flex-row gap-1 ">
             <div className="flex flex-grow justify-center">
-              <button className="w-full bg-errorButton rounded-4 flex  justify-center py-1">
+              <button
+               onClick={() => removeItemFromCart(product)}
+              className="w-full bg-errorButton rounded-4 flex  justify-center py-1">
                 <IconCircleMinus className="text-white"></IconCircleMinus>
               </button>
             </div>
