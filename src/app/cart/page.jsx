@@ -14,7 +14,7 @@ const CartPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         setCart(res.data.data)
-        console.log(res, ' <<< we did it ')
+        // console.log(res, ' <<< we did it ')
       } catch (error) {
         console.log(error, ' <<<  ')
       }
