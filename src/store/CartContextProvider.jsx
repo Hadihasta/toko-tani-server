@@ -79,7 +79,6 @@ export default function CartContextProvider({ children }) {
         }
       )
 
-      // console.log(res, '>>>> fetch')
     } catch (err) {
       console.error('Update cart failed:', err)
     }
