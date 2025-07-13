@@ -29,13 +29,13 @@ export async function POST(req) {
 
     // Loop update setiap product
     for (const item of products) {
-      const { product_id, quantity } = item
+      const { id, quantity } = item
 
-      const product = await prisma.product.findUnique({ where: { id: product_id } })
+      const product = await prisma.product.findUnique({ where: { id: id } })
       if (!product) continue
 
       const existingCartProduct = await prisma.cartProduct.findFirst({
-        where: { cart_id: cart.id, product_id },
+        where: { cart_id: cart.id, id },
       })
 
       if (existingCartProduct) {

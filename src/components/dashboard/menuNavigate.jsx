@@ -6,24 +6,25 @@ import { IconList, IconShoppingCart } from '@tabler/icons-react'
 import { CartContext } from '@/store/CartContextProvider'
 
 export default function MenuNavigate() {
-  const {items, addItemToCart}= useContext(CartContext)
+  const {items, updateCart}= useContext(CartContext)
 
 
   // console.log(items ,  "<<<<" )
   const router = useRouter()
 
-  const handleSection = (section) => {
-    switch (section) {
-      case 'dashboard':
-        router.push('/dashboard')
-        break
-      case 'cart':
-        router.push('/cart')
-        break
-      default:
-        break
-    }
+const handleSection = async (section) => {
+  switch (section) {
+    case 'dashboard':
+      router.push('/dashboard');
+      break;
+    case 'cart':
+      await updateCart()
+      router.push('/cart');
+      break;
+    default:
+      break;
   }
+};
 
   return (
     <div
@@ -52,7 +53,6 @@ export default function MenuNavigate() {
               />
             </button>
             <div id="counter">
-              {/* default like this 'cartCtx.items.length */}
               {items.length > 0 && (
                 <div
                   className="rounded-circle bg-greenSecondary flex justify-center border border-success border-3 fw-bold"
