@@ -6,7 +6,7 @@ import ProductCard from '@/components/product/productCard'
 
 export default function ProductsClient({ initialData, initialPage, limit }) {
  
-//  const { addToCart } = useContext(CartContext)
+
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['products'],
