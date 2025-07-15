@@ -4,9 +4,11 @@ import axios from '@/lib/axios'
 import MenuNavigate from '@/components/dashboard/menuNavigate'
 import ProductDisplay from '@/components/cart/productDisplay'
 import DisplayPrice from '@/components/cart/displayPrice'
+import Checkout from '@/components/cart/Checkout'
 
 const CartPage = () => {
   const [cart, setCart] = useState(null)
+  const [cartItems, setCartItems] = useState(cart)
   useEffect(() => {
     const token = localStorage.getItem('token')
     const getMasterCart = async () => {
@@ -15,13 +17,21 @@ const CartPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         setCart(res.data.data)
-
+        setCartItems(res.data.data.cartProducts)
       } catch (error) {
-        console.log(error , " something goes wrong....")
+        console.log(error, ' something goes wrong....')
       }
     }
     getMasterCart()
   }, [])
+
+  const updateQuantity = (id, newQty) => {
+    // console.log(newQty ,  " parents ")
+    setCartItems((prev) => prev.map((item) => (item.id === id ? { ...item, quantity: newQty } : item)))
+  }
+const totalPrice = Array.isArray(cartItems)
+  ? cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  : 0;
   return (
     <>
       <div
@@ -40,14 +50,21 @@ const CartPage = () => {
         <div className="content-wrapper px-4   flex-grow-1  overflow-x-visible overflow-scroll">
           {cart?.cartProducts?.map((products, index) => {
             return (
-              <div className="display-wrapper py-3 flex"
-               key={products.id}>
-                <ProductDisplay data={products}/>
-                <DisplayPrice data={products} />
+              <div
+                className="display-wrapper py-3 flex"
+                key={products.id}
+              >
+                <ProductDisplay data={products} />
+                <DisplayPrice
+                  key={products.id}
+                  data={products}
+                  updateQuantity={updateQuantity}
+                />
               </div>
             )
           })}
         </div>
+     <Checkout totalPrice={totalPrice} />
         <MenuNavigate />
       </div>
     </>

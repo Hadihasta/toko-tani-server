@@ -1,23 +1,25 @@
 import { useState } from 'react'
 import { IconCirclePlus, IconCircleMinus } from '@tabler/icons-react'
 
-const DisplayPrice = (data) => {
-  const resData = data.data
-  const [quantity, setQuantity] = useState(resData.quantity)
+const DisplayPrice = ({ data, updateQuantity } ) => {
+  const [quantity, setQuantity] = useState(data.quantity)
 
-  //   console.log(resData.quantity, ' <<<< ')
+
+  // console.log(data, ' <<<< ')
 
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1)
+        updateQuantity(data.id, quantity + 1);
   }
 
   const handleDecrement = () => {
     if (quantity > 0) {
       setQuantity((prev) => prev - 1)
+        updateQuantity(data.id, quantity - 1);
     }
   }
 
-  const totalPrice = quantity * resData.price
+  const totalPrice = quantity * data.price
 
   return (
     <div className="flex flex-col flex-grow-1">
@@ -32,7 +34,7 @@ const DisplayPrice = (data) => {
           {quantity}
         </div>
         <div className="times">X</div>
-        <div className="price font-bold  ">{resData.price}</div>
+        <div className="price font-bold  ">{data.price}</div>
         <div> = </div>
         <div className="total-price font-bold  text-greenSurface">{totalPrice}</div>
       </div>
