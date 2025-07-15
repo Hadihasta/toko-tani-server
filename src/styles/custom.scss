@@ -5,6 +5,7 @@ $yellowBackground: #e7b33a;
 $greenSecondary: #f2ffd7;
 $greenThird: #176200;
 $yellowCard: #f7efd7;
+$orange: #E8AA6B;
 
 $theme-colors: (
   'softPrimary': $softPrimary,
@@ -34,6 +35,9 @@ $theme-colors: (
 }
 .bg-greenSecondary {
   background-color: $greenSecondary;
+}
+.bg-orange {
+  background-color: $orange;
 }
 
 // font size
