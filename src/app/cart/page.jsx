@@ -9,7 +9,6 @@ import Checkout from '@/components/cart/Checkout'
 const CartPage = () => {
   const [cart, setCart] = useState(null)
   const [cartItems, setCartItems] = useState(cart)
-  const [finalCart, setFinalCart] = useState(cartItems)
   useEffect(() => {
     const token = localStorage.getItem('token')
     const getMasterCart = async () => {
@@ -31,7 +30,7 @@ const CartPage = () => {
     const updated = prev.map(item =>
       item.id === id ? { ...item, quantity: newQty } : item
     );
-    console.log(updated, '✅ updated cartItems');
+    console.log(updated , " <<< ");
     // kirim ini ke api namun olah dulu 
     return updated;
   });
