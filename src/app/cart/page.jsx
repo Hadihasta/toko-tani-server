@@ -9,6 +9,7 @@ import Checkout from '@/components/cart/Checkout'
 const CartPage = () => {
   const [cart, setCart] = useState(null)
   const [cartItems, setCartItems] = useState(cart)
+  const [finalCart, setFinalCart] = useState(cartItems)
   useEffect(() => {
     const token = localStorage.getItem('token')
     const getMasterCart = async () => {
@@ -26,12 +27,17 @@ const CartPage = () => {
   }, [])
 
   const updateQuantity = (id, newQty) => {
-    // console.log(newQty ,  " parents ")
-    setCartItems((prev) => prev.map((item) => (item.id === id ? { ...item, quantity: newQty } : item)))
-  }
-const totalPrice = Array.isArray(cartItems)
-  ? cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  : 0;
+  setCartItems(prev => {
+    const updated = prev.map(item =>
+      item.id === id ? { ...item, quantity: newQty } : item
+    );
+    console.log(updated, '✅ updated cartItems');
+    // kirim ini ke api namun olah dulu 
+    return updated;
+  });
+};
+  const totalPrice = Array.isArray(cartItems) ? cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) : 0
+
   return (
     <>
       <div
@@ -64,7 +70,7 @@ const totalPrice = Array.isArray(cartItems)
             )
           })}
         </div>
-     <Checkout totalPrice={totalPrice} />
+        <Checkout totalPrice={totalPrice} />
         <MenuNavigate />
       </div>
     </>

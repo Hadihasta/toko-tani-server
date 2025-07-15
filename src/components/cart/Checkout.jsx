@@ -8,11 +8,11 @@ const Checkout = ({totalPrice} ) => {
                 <div className='text-greenSurface font-bold'>Total</div>            
                 <div className=' text-greenSurface font-bold'>{totalPrice}</div>            
         </div>
-            <div className='bg-orange px-3 py-2 w-100  flex justify-content-center  align-items-center rounded-2 '>
                 <button  className=' font-bold  text-greenSurface '>
+            <div className='bg-orange px-3 py-2 w-100  flex justify-content-center  align-items-center rounded-2 '>
                     Checkout
-                </button>
             </div>
+                </button>
 
       </div>
     </div>
