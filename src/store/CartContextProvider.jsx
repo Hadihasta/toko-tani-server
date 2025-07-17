@@ -18,7 +18,6 @@ export default function CartContextProvider({ children }) {
       const updatedItems = [...prev.items]
       if (updatedItems.length === 0) {
         updatedItems.push({ ...product, quantity: 1 })
-        // console.log(updatedItems, 'item pertama di cart')
         return { items: updatedItems }
       } else {
         const updatedItems = [...prev.items]
@@ -28,10 +27,8 @@ export default function CartContextProvider({ children }) {
         if (existingItemIndex !== -1) {
           updatedItems[existingItemIndex].quantity += 1
 
-          // console.log(updatedItems[existingItemIndex].quantity, ' <<<< ini item lama yang ada')
         } else {
           updatedItems.push({ ...product, quantity: 1 })
-          // console.log(updatedItems, '<<<< kalo gk ada ini item baru')
         }
 
         return { items: updatedItems }

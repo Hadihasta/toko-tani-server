@@ -1,11 +1,30 @@
+'use client'
 import { useRouter } from 'next/navigation'
+import axios from '@/lib/axios'
 
-const Checkout = ({ totalPrice }) => {
+const Checkout = ({ totalPrice, cartItems, payload }) => {
   const router = useRouter()
 
+
   const handleCheckout = () => {
-    // router.push('/checkout')
-    console.log('fetch api and redirect ')
+    router.push('/checkout')
+    createCheckout(payload)
+  }
+
+  const createCheckout = async (payload) => {
+    try {
+      const token = localStorage.getItem('token')
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout/create-checkout`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+    } catch (error) {
+      if (error.status === 401) {
+        router.push('/login')
+      } else {
+        console.log(error, ' something goes wrong....')
+      }
+    }
   }
 
   return (

@@ -5,7 +5,6 @@ import { IconCirclePlus, IconCircleMinus } from '@tabler/icons-react'
 const ProductCard = ({ product }) => {
   const { items, addItemToCart , removeItemFromCart} = useContext(CartContext)
 
-  // console.log(items, ' <<<< ')
 
   return (
     <>

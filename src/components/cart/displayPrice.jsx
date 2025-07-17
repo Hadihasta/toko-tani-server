@@ -5,7 +5,6 @@ const DisplayPrice = ({ data, updateQuantity } ) => {
   const [quantity, setQuantity] = useState(data.quantity)
 
 
-  // console.log(data, ' <<<< ')
 
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1)

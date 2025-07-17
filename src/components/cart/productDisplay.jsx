@@ -1,7 +1,6 @@
 import React from 'react'
 
 const ProductDisplay = (data) => {
-  // console.log(data.data.product , " <<<< ")
 
   return (
     <div>
