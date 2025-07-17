@@ -93,7 +93,7 @@ model Checkout {
   cart        Cart           @relation(fields: [cart_id], references: [id])
   cart_id     Int            @unique
   status      CheckoutStatus
-  invoice     String
+  invoice     String?
   paid_at     DateTime?
   transaction Transaction? // One-to-one back relation
   created_at  DateTime       @default(now())
