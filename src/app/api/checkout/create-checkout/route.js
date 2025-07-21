@@ -48,12 +48,11 @@ export async function POST(req) {
 
     await Promise.all([...cartProductOps, updateCart])
 
-  
     // Cek apakah sudah ada checkout pending untuk user ini
     let checkout = await prisma.checkout.findFirst({
       where: {
         user_id: userId,
-        status: 'PENDING',
+        status: 'PAID',
       },
     })
 
@@ -77,16 +76,15 @@ export async function POST(req) {
       })
     }
 
-    return NextResponse.json({
-      message: 'Cart updated and checkout created successfully',
-      checkout,
-    }, { status: 200 })
-
+    return NextResponse.json(
+      {
+        message: 'Cart updated and checkout created successfully',
+        checkout,
+      },
+      { status: 200 }
+    )
   } catch (error) {
     console.error(error)
-    return NextResponse.json(
-      { message: 'Invalid token or server error', error: error.message },
-      { status: 500 }
-    )
+    return NextResponse.json({ message: 'Invalid token or server error', error: error.message }, { status: 500 })
   }
 }

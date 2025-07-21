@@ -42,7 +42,7 @@ export async function POST(req) {
       where: { id: Number(checkout_id) },
       data: {
         invoice: invoicePath,
-        status: 'PENDING', // Ubah status jadi pending saat user upload invoice
+        status: 'PAID', // Ubah status jadi pending saat user upload invoice
       },
     })
 
