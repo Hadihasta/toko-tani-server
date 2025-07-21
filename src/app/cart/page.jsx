@@ -22,6 +22,7 @@ const CartPage = () => {
 
         setCart(res.data.data)
         setCartItems(res.data.data.cartProducts)
+        updateQuantity()
       } catch (error) {
         if (error.status === 401) {
           router.push('/login')

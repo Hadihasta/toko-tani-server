@@ -80,9 +80,11 @@ model CartProduct {
 }
 
 enum CheckoutStatus {
-  PENDING // menunggu approval
-  PAID // success terbayar
-  FAILED // dana tidak masuk
+  PENDING   // menunggu approval
+  APPROVED  // disetujui admin dan akan diproses
+  PAID      // success terbayar
+  FINISH    // pesanan selesai terkirim
+  FAILED    // dana tidak masuk
   CANCELLED // stock habis
 }
 
