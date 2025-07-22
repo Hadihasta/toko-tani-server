@@ -79,8 +79,7 @@ const Checkout = () => {
         },
       })
 
-        setCheckoutStatus(uploadRes.data.data)
-
+      setCheckoutStatus(uploadRes.data.data)
     } catch (error) {
       console.error('Upload gagal:', error)
     }
@@ -123,6 +122,26 @@ const Checkout = () => {
 
           {checkoutStatus?.status === 'PAID' && (
             <p className="text-sm text-greenSurface font-bold">Menunggu Admin Untuk Memproses Pesananmu</p>
+          )}
+
+          {checkoutStatus?.status === 'APPROVED' && (
+            <p className="text-sm text-greenSurface font-bold">Dana diterima, Admin sedang memproses pengiriman</p>
+          )}
+          {checkoutStatus?.status === 'FINISH' && (
+            <p className="text-sm text-greenSurface font-bold">Pesanan sudah dikirim</p>
+          )}
+
+          {checkoutStatus?.status === 'CANCELLED' && (
+            <div className="flex flex-col justify-center align-items-center ">
+              <p className="text-sm text-pink-800 font-bold">Maaf, Stock sedang Habis</p>
+              <p className="text-sm  font-bold">Silakan hubungi 08218222XXXX untuk Refund</p>
+            </div>
+          )}
+          {checkoutStatus?.status === 'FAILED' && (
+            <div className="flex flex-col justify-center align-items-center ">
+              <p className="text-sm text-pink-800 font-bold">Maaf, Dana tidak masuk</p>
+              <p className="text-sm  font-bold">Silakan hubungi 08218222XXXX untuk Bantuan</p>
+            </div>
           )}
 
           <input

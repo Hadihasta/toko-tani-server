@@ -51,7 +51,6 @@ const LoginPage = () => {
         let message = res.data.message
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id_user', res.data.id_user)
-        router.push('/dashboard')
         toast(message, {
           style: {
             backgroundColor: '#b9f8cf',
@@ -59,6 +58,12 @@ const LoginPage = () => {
             border: '#05df72',
           },
         })
+      }
+
+      if (res.data.role === 'admin') {
+        router.push('admin/dashboard')
+      } else {
+        router.push('/dashboard')
       }
     } catch (error) {
       let message = error.response.data.error
