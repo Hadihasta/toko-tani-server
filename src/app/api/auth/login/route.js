@@ -26,7 +26,7 @@ export async function POST(req) {
         const token = generateToken({ id: result.id, role: result.role })
 
         return NextResponse.json(
-          { message: 'login Succes', name, token  ,id_user :  result.id, status_code: 200   },
+          { message: 'login Succes', name,role:result.role, token  ,id_user :  result.id, status_code: 200   },
           {
             status: 200,
           }
