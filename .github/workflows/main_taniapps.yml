@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy container app to Azure Web App - taniapps
+name: Deploy Next.js App to Azure Web App
 
 on:
   push:
@@ -10,42 +7,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: 'ubuntu-latest'
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Log in to registry
-      uses: docker/login-action@v2
-      with:
-        registry: https://tani.mysql.database.azure.com/
-        username: ${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_51aaaa9f182545e2883051e0b2f35f69 }}
-
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: tani.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}
-        file: ./Dockerfile
-
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate Prisma Client
+      run: npx prisma generate
+
+    - name: Build Next.js app
+      run: npm run build
+
     - name: Deploy to Azure Web App
-      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'taniapps'
+        app-name: 'taniapps'  # Sesuaikan dengan App Service-mu
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_1c22a05247c348fc8a213daca452bcfa }}
-        images: 'tani.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}'
