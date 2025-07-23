@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
-    "start": "next start -p $PORT",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 8080",
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "6.9.0",
+    "@prisma/client": "^6.12.0",
     "@tabler/icons-react": "^3.34.0",
     "@tanstack/react-query": "^5.81.5",
     "axios": "1.9.0",
@@ -35,7 +35,7 @@
     "@tailwindcss/postcss": "4",
     "eslint": "9",
     "eslint-config-next": "15.3.3",
-    "prisma": "6.9.0",
+    "prisma": "^6.12.0",
     "tailwindcss": "4",
     "tw-animate-css": "^1.3.4"
   }
