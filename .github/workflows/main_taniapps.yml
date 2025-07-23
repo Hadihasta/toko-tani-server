@@ -22,15 +22,15 @@ jobs:
     - name: Log in to registry
       uses: docker/login-action@v2
       with:
-        registry: https://sedulur.mysql.database.azure.com/
-        username: ${{ secrets.AzureAppService_ContainerUsername_e0c8ea307683415592f6bb63773fa541 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_a8d5dfca54ca4b68b59209d8ab3817c5 }}
+        registry: https://tani.mysql.database.azure.com/
+        username: ${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_51aaaa9f182545e2883051e0b2f35f69 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: sedulur.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_e0c8ea307683415592f6bb63773fa541 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}
+        tags: tani.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'taniapps'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8c6355a76bce437a821d6aadd44bcdb5 }}
-        images: 'sedulur.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_e0c8ea307683415592f6bb63773fa541 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1c22a05247c348fc8a213daca452bcfa }}
+        images: 'tani.mysql.database.azure.com/${{ secrets.AzureAppService_ContainerUsername_b006e89f657c418c9905d201628dc898 }}/mcr.microsoft.com/azure-app-service/windows/parkingpage:${{ github.sha }}'
