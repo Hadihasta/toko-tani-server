@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `checkout` MODIFY `status` ENUM('PENDING', 'APPROVED', 'PAID', 'FINISH', 'FAILED', 'CANCELLED') NOT NULL;

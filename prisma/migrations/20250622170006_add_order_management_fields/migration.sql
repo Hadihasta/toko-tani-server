@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `checkout` ADD COLUMN `notes` VARCHAR(191) NULL,
+    MODIFY `status` ENUM('PENDING', 'PAID', 'FAILED', 'CANCELLED', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING';
+
+-- AlterTable
+ALTER TABLE `transaction` ADD COLUMN `paymentProofUrl` VARCHAR(191) NULL;
