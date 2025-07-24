@@ -27,14 +27,14 @@ jobs:
       - name: 🏗️ Build Next.js App
         run: npm run build
 
-      # Optional: Jika kamu perlu generate Prisma di server
-      # - name: ⬆️ Copy Prisma folder (optional jika dibutuhkan di server)
-      #   run: cp -r prisma/ .next/prisma/
+      - name: 🔐 Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 🚀 Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'taniapp' # ← Ganti dengan nama App Service kamu
+          app-name: 'apptani'              # Ganti dengan nama App Service kamu
           slot-name: 'production'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
