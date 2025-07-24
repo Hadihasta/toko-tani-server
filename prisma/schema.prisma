@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -47,12 +48,12 @@ model Product {
   category     Categorie     @relation(fields: [category_id], references: [id])
   category_id  Int
   stock        Int           @default(0)
-  slug         String?        @unique
+  slug         String?       @unique
   keywords     String?
   cartProducts CartProduct[]
   is_active    Boolean
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
 }
 
 model Cart {
@@ -80,11 +81,11 @@ model CartProduct {
 }
 
 enum CheckoutStatus {
-  PENDING   // menunggu approval
-  APPROVED  // disetujui admin dan akan diproses
-  PAID      // success terbayar
-  FINISH    // pesanan selesai terkirim
-  FAILED    // dana tidak masuk
+  PENDING // menunggu approval
+  APPROVED // disetujui admin dan akan diproses
+  PAID // success terbayar
+  FINISH // pesanan selesai terkirim
+  FAILED // dana tidak masuk
   CANCELLED // stock habis
 }
 
