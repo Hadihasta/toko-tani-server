@@ -10,27 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: ⬇️ Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: 🧰 Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm install
 
-      - name: Prisma Generate
+      - name: 🔧 Generate Prisma Client
         run: npx prisma generate
 
-      - name: Build Next.js app
+      - name: 🏗️ Build Next.js App
         run: npm run build
 
-      - name: Upload to Azure Web App
+      # Optional: Jika kamu perlu generate Prisma di server
+      # - name: ⬆️ Copy Prisma folder (optional jika dibutuhkan di server)
+      #   run: cp -r prisma/ .next/prisma/
+
+      - name: 🚀 Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'taniapp' # <- ganti dengan nama App Servicemu
+          app-name: 'taniapp' # ← Ganti dengan nama App Service kamu
           slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
