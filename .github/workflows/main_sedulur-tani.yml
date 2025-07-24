@@ -28,8 +28,6 @@ jobs:
 
       - name: Build Next.js app
         run: npm run build
-      - name: start Next.js app
-        run: npm run start
 
       - name: Zip artifact for deployment
         run: zip -r release.zip . -x "node_modules/*" ".git/*"
