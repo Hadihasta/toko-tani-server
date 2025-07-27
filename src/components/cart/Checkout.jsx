@@ -29,16 +29,16 @@ const Checkout = ({ totalPrice, cartItems, payload }) => {
 
   return (
     <div>
-      <div className="bg-yellowCard w-100 h-30 px-4 py-2 flex flex-col justify-content-around">
-        <div className="total-wrapper flex flex-row justify-content-end gap-3">
-          <div className="text-greenSurface font-bold">Total</div>
-          <div className=" text-greenSurface font-bold">{totalPrice}</div>
+      <div className="bg-yellowCard w-100 h-30 px-4 py-2 d-flex flex-column justify-content-around">
+        <div className="total-wrapper d-flex flex-row justify-content-end gap-3">
+          <div className="text-greenSurface fw-bold">Total</div>
+          <div className=" text-greenSurface fw-bold">{totalPrice}</div>
         </div>
         <button
           onClick={handleCheckout}
-          className=" font-bold  text-greenSurface "
+          className=" fw-bold  text-greenSurface border-transparent  "
         >
-          <div className="bg-orange px-3 py-2 w-100  flex justify-content-center  align-items-center rounded-2 ">
+          <div className="bg-orange px-3 py-2 w-100  d-flex justify-content-center  align-items-center rounded-2 ">
             Checkout
           </div>
         </button>

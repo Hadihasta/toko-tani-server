@@ -58,7 +58,7 @@ const CartPage = () => {
   return (
     <>
       <div
-        className="fullHeight-wrapper flex flex-col"
+        className="fullHeight-wrapper d-flex flex-column"
         style={{ height: '100%' }}
       >
         <div className="head-wrapper relative px-4">
@@ -74,7 +74,7 @@ const CartPage = () => {
           {cart?.cartProducts?.map((products, index) => {
             return (
               <div
-                className="display-wrapper py-3 flex"
+                className="display-wrapper py-3 d-flex"
                 key={products.id}
               >
                 <ProductDisplay data={products} />

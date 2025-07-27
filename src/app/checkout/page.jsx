@@ -87,7 +87,7 @@ const Checkout = () => {
 
   return (
     <div
-      className="fullHeight-wrapper flex flex-col"
+      className="fullHeight-wrapper d-flex flex-column"
       style={{ height: '100%' }}
     >
       <div className="head-wrapper relative px-4">
@@ -97,50 +97,50 @@ const Checkout = () => {
         />
       </div>
 
-      <div className="body-wrapper p-3 m-4 bg-yellowCard rounded flex flex-col flex-grow-1">
-        <div className="bank-wrapper flex flex-col justify-content-center align-items-center">
-          <div className="font-bold fs-12">Transfer Bank BCA</div>
-          <div className="font-medium fs-15">a.n Bambang Sumatra 0942XXXXX</div>
+      <div className="body-wrapper p-3 m-4 bg-yellowCard rounded d-flex flex-column flex-grow-1">
+        <div className="bank-wrapper d-flex flex-column justify-content-center align-items-center">
+          <div className="fw-bold fs-12">Transfer Bank BCA</div>
+          <div className="fw-medium fs-15">a.n Bambang Sumatra 0942XXXXX</div>
         </div>
 
-        <div className="Total-wrapper flex flex-col justify-content-center align-items-center flex-1">
-          <div className="text-greenSurface font-bold fs-24">
+        <div className="Total-wrapper d-flex flex-column justify-content-center align-items-center flex-grow-1">
+          <div className="text-greenSurface fw-bold fs-24">
             <span>Rp.</span>
             {totalCost}
           </div>
         </div>
 
-        <div className="flex justify-content-center align-items-center flex-1">
+        <div className="d-flex justify-content-center align-items-center flex-1">
           {(checkoutStatus?.status === undefined || checkoutStatus?.status === 'PENDING') && (
             <button
               onClick={handleUploadClick}
-              className="button-wrapper bg-orange font-bold px-3 py-2 w-100 flex justify-content-center align-items-center text-greenSurface  rounded-2"
+              className="button-wrapper bg-orange fw-bold px-3 py-2 w-100 d-flex justify-content-center border align-items-center text-greenSurface  rounded-2"
             >
               Upload Bukti Transfer
             </button>
           )}
 
           {checkoutStatus?.status === 'PAID' && (
-            <p className="text-sm text-greenSurface font-bold">Menunggu Admin Untuk Memproses Pesananmu</p>
+            <p className="text-sm text-greenSurface fw-bold d-flex text-center">Menunggu Admin Untuk Memproses Pesananmu</p>
           )}
 
           {checkoutStatus?.status === 'APPROVED' && (
-            <p className="text-sm text-greenSurface font-bold">Dana diterima, Admin sedang memproses pengiriman</p>
+            <p className="text-sm text-greenSurface fw-bold text-center">Dana diterima, Admin sedang memproses pengiriman</p>
           )}
           {checkoutStatus?.status === 'FINISH' && (
-            <p className="text-sm text-greenSurface font-bold">Pesanan sudah dikirim</p>
+            <p className="text-sm text-greenSurface fw-bold text-center">Pesanan sudah dikirim</p>
           )}
 
           {checkoutStatus?.status === 'CANCELLED' && (
-            <div className="flex flex-col justify-center align-items-center ">
-              <p className="text-sm text-pink-800 font-bold">Maaf, Stock sedang Habis</p>
-              <p className="text-sm  font-bold">Silakan hubungi 08218222XXXX untuk Refund</p>
+            <div className="flex flex-column justify-center align-items-center ">
+              <p className="text-sm text-danger fw-bold text-center">Maaf, Stock sedang Habis</p>
+              <p className="text-sm  fw-bold text-center">Silakan hubungi 08218222XXXX untuk Refund</p>
             </div>
           )}
           {checkoutStatus?.status === 'FAILED' && (
-            <div className="flex flex-col justify-center align-items-center ">
-              <p className="text-sm text-pink-800 font-bold">Maaf, Dana tidak masuk</p>
-              <p className="text-sm  font-bold">Silakan hubungi 08218222XXXX untuk Bantuan</p>
+            <div className="flex flex-column justify-center align-items-center ">
+              <p className="text-sm text-danger fw-bold text-center">Maaf, Dana tidak masuk</p>
+              <p className="text-sm  fw-bold text-center">Silakan hubungi 08218222XXXX untuk Bantuan</p>
             </div>
           )}
 

@@ -27,24 +27,24 @@ export default function MenuNavigate() {
   return (
     <div className="footer-wrapper" style={{ height: '105px' }}>
       <div className="footer-content bg-yellowBackground" style={{ height: '105px' }}>
-        <div className="content-wrapper flex justify-content-evenly" style={{ height: '100%' }}>
-          <button onClick={() => handleSection('dashboard')}>
+        <div className="content-wrapper d-flex justify-content-evenly" style={{ height: '100%' }}>
+          <button className='bg-transparent border-transparent' onClick={() => handleSection('dashboard')}>
             <IconList
               size={75}
               className={pathname.includes('/dashboard') ? 'text-greenThird' : 'text-greenSecondary'}
             />
           </button>
-          <div className="flex flex-row">
-            <button onClick={() => handleSection('cart')}>
+          <div className="d-flex flex-row">
+            <button className='bg-transparent border-transparent' onClick={() => handleSection('cart')}>
               <IconShoppingCart
                 size={75}
                 className={pathname.includes('/cart') ? 'text-greenThird' : 'text-greenSecondary'}
               />
-            </button>
+            </button >
             <div id="counter">
               {items.length > 0 && (
                 <div
-                  className="rounded-circle bg-greenSecondary flex justify-center border border-success border-3 fw-bold"
+                  className="rounded-circle bg-greenSecondary d-flex justify-content-center border border-success border-3 fw-bold"
                   style={{ width: '30px', position: 'relative', bottom: '-40px' }}
                 >
                   {items.length}

@@ -65,19 +65,19 @@ const TableData = ({ data }) => {
             <TableCell className="font-medium">{item.user.name}</TableCell>
             <TableCell>
               <span
-                className={`px-2 py-1 rounded text-xs font-semibold ${
+                className={`px-2 py-1 rounded text-xs fw-semibold ${
                   item.status === 'PENDING'
-                    ? 'bg-yellow-200 text-yellow-800'
+                    ? '. text-warning'
                     : item.status === 'APPROVED'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'text-success-emphasis'
                     : item.status === 'PAID'
-                    ? 'bg-purple-200 text-purple-800'
+                    ? 'text-primary-emphasis'
                     : item.status === 'FINISH'
-                    ? 'bg-green-700 text-white'
+                    ? 'text-success'
                     : item.status === 'FAILED'
-                    ? 'bg-pink-200 text-pink-800'
+                    ? 'text-danger-emphasis'
                     : item.status === 'CANCELLED'
-                    ? 'bg-red-700 text-white'
+                    ? 'text-danger'
                     : ''
                 }`}
               >

@@ -80,7 +80,7 @@ const LoginPage = () => {
   return (
     <>
       <div id="login-page">
-        <div className=" index-head h-100vh container-sm flex flex-col justify-content-center align-items-center ">
+        <div className=" index-head h-100vh container-sm  d-flex flex-column justify-content-center align-items-center ">
           <div>
             <motion.div
               initial={{ y: -100, opacity: 0 }}
@@ -141,7 +141,7 @@ const LoginPage = () => {
           >
             <button
               onClick={handleLogin}
-              className="py-2 px-4 rounded-4 bg-softPrimary text-greenPrimary fw-700"
+              className="py-2 px-4 border rounded-4 bg-softPrimary text-greenPrimary fw-700"
             >
               Log in
             </button>

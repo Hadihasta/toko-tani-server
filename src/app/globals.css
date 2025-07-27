@@ -1,5 +1,4 @@
-@import "tw-animate-css";
-@import "tailwindcss";
+
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 @custom-variant dark (&:is(.dark *));

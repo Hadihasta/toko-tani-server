@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       <div id="landing-page-wrapper ">
-        <div className=" h-100vh container-sm flex flex-col justify-content-center align-items-center ">
+        <div className=" h-100vh container-sm  d-flex flex-column justify-content-center align-items-center ">
           <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 50, opacity: 1 }}
@@ -19,7 +19,7 @@ export default function Home() {
               delay: 0.3,
             }}
           >
-            <div className=" mbp-60 mbp-sm-20 content-wrapper flex flex-col justify-content-center align-items-center">
+            <div className=" mbp-60 mbp-sm-20 content-wrapper d-flex flex-column justify-content-center align-items-center"  style={{justifyItems : 'center' } }>
               <Image
                 src="/images/logo_tani.svg"
                 alt="toko_tani.logo"

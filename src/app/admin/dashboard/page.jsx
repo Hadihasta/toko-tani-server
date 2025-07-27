@@ -42,11 +42,11 @@ const Dashboard = () => {
 
   return (
     <div className="p-3">
-      <div className="flex flex-row justify-center font-bold mb-2">Transaction</div>
+      <div className="d-flex flex-row justify-content-center fw-bold mb-2">Transaction</div>
 
       <TableData data={dataTable} />
 
-      <div className="flex justify-between items-center mt-4">
+      <div className="d-flex justify-content-between items-center mt-4">
         <button
           onClick={handlePrevPage}
           disabled={page === 1}

@@ -81,6 +81,11 @@ $theme-colors: (
   color: $greenThird;
 }
 
+// border
+.border-transparent {
+  border: 1px solid transparent;
+} 
+
 // padding
 
 // margin

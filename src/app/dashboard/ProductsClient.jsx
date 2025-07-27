@@ -1,13 +1,10 @@
 'use client'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRef, useCallback, useContext  } from 'react'
+import { useRef, useCallback } from 'react'
 import ProductCard from '@/components/product/productCard'
 
 export default function ProductsClient({ initialData, initialPage, limit }) {
- 
-
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['products'],
     queryFn: async ({ pageParam = Number(initialPage) }) => {
@@ -29,7 +26,6 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
     },
   })
 
- 
   const observer = useRef()
 
   const lastProductRef = useCallback(
@@ -46,11 +42,14 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
     [isFetchingNextPage, fetchNextPage, hasNextPage]
   )
 
+  // Add placeholder function to prevent error
+  const addToCart = (product) => {
+    console.log("Add to cart:", product)
+  }
 
   return (
-
-    <div>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="container">
+      <div className="row g-1">
         {data.pages.flatMap((page, i) =>
           page.data.map((product, index) => {
             const isLastProduct = i === data.pages.length - 1 && index === page.data.length - 1
@@ -58,16 +57,17 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
             return (
               <div
                 key={product.id}
+                className="col-6"
                 ref={isLastProduct ? lastProductRef : null}
               >
-               <ProductCard product={product} onAddToCart={() => addToCart(product)} />
+                <ProductCard product={product} onAddToCart={() => addToCart(product)} />
               </div>
             )
           })
         )}
       </div>
 
-      {isFetchingNextPage && <p>Loading more...</p>}
+      {isFetchingNextPage && <p className="text-center my-2">Loading more...</p>}
     </div>
   )
 }

@@ -27,7 +27,7 @@ const DashboardPage = async ({ searchParams }) => {
     <CartContextProvider>
       <QueryProvider>
         <div
-          className="flex flex-col"
+          className="d-flex flex-column"
           style={{ height: '100%' }}
         >
           <div className="content-wrapper px-4   flex-grow-1  overflow-x-visible overflow-scroll ">
@@ -40,10 +40,10 @@ const DashboardPage = async ({ searchParams }) => {
                 }}
               />
               <div
-                className="icon-wrapper position-absolute flex  justify-content-evenly"
-                style={{ top: 30, left: 0, right: 0, maxWidth: '530px' }}
+                className="icon-wrapper position-relative d-flex  justify-content-evenly"
+                style={{ top: -30, left: 0, right: 0, maxWidth: '530px' }}
               >
-                <button>
+                <button className="bg-transparent border-transparent ">
                   <Image
                     src="icons/icon-all.svg"
                     alt="toko_tani.logo"
@@ -52,7 +52,7 @@ const DashboardPage = async ({ searchParams }) => {
                   />
                   <span> All </span>
                 </button>
-                <button>
+                <button className="bg-transparent border-transparent ">
                   <Image
                     src="icons/pupuk.svg"
                     alt="toko_tani.logo"
@@ -61,7 +61,7 @@ const DashboardPage = async ({ searchParams }) => {
                   />
                   <span> Pupuk </span>
                 </button>
-                <button>
+                <button className="bg-transparent border-transparent ">
                   <Image
                     src="icons/obat.svg"
                     alt="toko_tani.logo"
@@ -70,7 +70,7 @@ const DashboardPage = async ({ searchParams }) => {
                   />
                   <span> Obat </span>
                 </button>
-                <button>
+                <button className="bg-transparent border-transparent ">
                   <Image
                     src="icons/alat-tani.svg"
                     alt="toko_tani.logo"
@@ -81,10 +81,7 @@ const DashboardPage = async ({ searchParams }) => {
                 </button>
               </div>
             </div>
-            <div
-              className="body-wrapper"
-              style={{ marginTop: '100px' }}
-            >
+            <div className="body-wrapper">
               <div>
                 {/* initial data inject ke product client lewat props */}
                 <ProductsClient
