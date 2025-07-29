@@ -1,5 +1,4 @@
 import QueryProvider from '../providers/QueryProvider'
-import Image from 'next/image'
 import ProductsClient from './ProductsClient'
 import MenuNavigate from '@/components/dashboard/menuNavigate'
 import CartContextProvider from '@/store/CartContextProvider'
@@ -39,51 +38,9 @@ const DashboardPage = async ({ searchParams }) => {
                   borderRadius: '0px 0px 60px 60px',
                 }}
               />
-              <div
-                className="icon-wrapper position-relative d-flex  justify-content-evenly"
-                style={{ top: -30, left: 0, right: 0, maxWidth: '530px' }}
-              >
-                <button className="bg-transparent border-transparent ">
-                  <Image
-                    src="icons/icon-all.svg"
-                    alt="toko_tani.logo"
-                    width={70}
-                    height={70}
-                  />
-                  <span> All </span>
-                </button>
-                <button className="bg-transparent border-transparent ">
-                  <Image
-                    src="icons/pupuk.svg"
-                    alt="toko_tani.logo"
-                    width={70}
-                    height={70}
-                  />
-                  <span> Pupuk </span>
-                </button>
-                <button className="bg-transparent border-transparent ">
-                  <Image
-                    src="icons/obat.svg"
-                    alt="toko_tani.logo"
-                    width={70}
-                    height={70}
-                  />
-                  <span> Obat </span>
-                </button>
-                <button className="bg-transparent border-transparent ">
-                  <Image
-                    src="icons/alat-tani.svg"
-                    alt="toko_tani.logo"
-                    width={70}
-                    height={70}
-                  />
-                  <span> Alat Tani </span>
-                </button>
-              </div>
             </div>
             <div className="body-wrapper">
               <div>
-                {/* initial data inject ke product client lewat props */}
                 <ProductsClient
                   initialData={data}
                   initialPage={page}

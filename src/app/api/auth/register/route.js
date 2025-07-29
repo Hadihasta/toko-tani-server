@@ -9,6 +9,15 @@ export async function POST(req) {
     return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
   }
 
+let finalRole = ""
+
+  if (role === "") { 
+    finalRole = "user" 
+  }else { 
+    finalRole = "admin"
+  }
+    
+
   const result = await prisma.user.findFirst({
     where: {
       name: name,
@@ -26,14 +35,14 @@ export async function POST(req) {
   const user = await prisma.user.create({
     data: {
       name: name,
-      role: role,
+      role: finalRole,
       phone: phone,
       password: bcryptPassword,
     },
   });
 
   return NextResponse.json(
-    { message: "Berhasil register", user },
+    { message: "Berhasil register silakan login", user },
     { status: 201 }
   );
 }

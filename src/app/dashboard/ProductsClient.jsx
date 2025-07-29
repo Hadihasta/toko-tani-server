@@ -1,15 +1,23 @@
 'use client'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState } from 'react'
 import ProductCard from '@/components/product/productCard'
+import MenuCategorie from '@/components/dashboard/menuCategorie'
 
-export default function ProductsClient({ initialData, initialPage, limit }) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['products'],
+export default function ProductsClient({ initialData, initialPage, limit, query }) {
+  const [category, setCategory] = useState(query || 0)
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['products', category],
     queryFn: async ({ pageParam = Number(initialPage) }) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/product/get-all-product?page=${pageParam}&limit=${limit}`
+        `${process.env.NEXT_PUBLIC_API_URL}/product/get-all-product?page=${pageParam}&limit=${limit}&query=${category}`
       )
       return res.json()
     },
@@ -42,13 +50,19 @@ export default function ProductsClient({ initialData, initialPage, limit }) {
     [isFetchingNextPage, fetchNextPage, hasNextPage]
   )
 
-  // Add placeholder function to prevent error
   const addToCart = (product) => {
-    console.log("Add to cart:", product)
+    // console.log('Add to cart:', product)
   }
 
   return (
     <div className="container">
+      <div
+        className="icon-wrapper position-relative d-flex  justify-content-evenly"
+        style={{ top: -30, left: 0, right: 0, maxWidth: '530px' }}
+      >
+        <MenuCategorie onSelect={(id) => setCategory(id)} />
+      </div>
+
       <div className="row g-1">
         {data.pages.flatMap((page, i) =>
           page.data.map((product, index) => {

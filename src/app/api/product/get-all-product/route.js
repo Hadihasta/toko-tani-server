@@ -5,15 +5,20 @@ export async function GET(req) {
   try {
     // Ambil query params dari URL
     const { searchParams } = new URL(req.url)
-    const page = parseInt(searchParams.get('page')) || 1 // default page 1
-    const limit = parseInt(searchParams.get('limit')) || 10 // default limit 10
+    const page = parseInt(searchParams.get('page')) || 1
+    const limit = parseInt(searchParams.get('limit')) || 10
+    const query = parseInt(searchParams.get('query')) || 0 // query = category_id
 
-    // Hitung total data
-    const total = await prisma.product.count()
+    // Hitung total data (dengan atau tanpa filter)
+    const total = await prisma.product.count({
+      where: query === 0 ? {} : { category_id: query }
+    })
+
     const totalPage = Math.ceil(total / limit)
 
-    // Ambil data sesuai page
+    // Ambil data produk (dengan atau tanpa filter)
     const result = await prisma.product.findMany({
+      where: query === 0 ? {} : { category_id: query },
       skip: (page - 1) * limit,
       take: limit,
     })
@@ -32,6 +37,7 @@ export async function GET(req) {
       { status: 200 }
     )
   } catch (error) {
+    console.error(error)
     return NextResponse.json(
       { message: 'Something Goes Wrong...' },
       { status: 400 }
