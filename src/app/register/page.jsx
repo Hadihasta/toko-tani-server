@@ -1,15 +1,14 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
+
 import { Input } from '@/components/ui/input'
 import { useReducer } from 'react'
 import axios from '@/lib/axios'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
-const initialCredential = { name: '', password: '' }
+const initialCredential = { name: '', password: '', phone: '' }
 
-const loginCredentialReducer = (state, action) => {
+const registerCredentialReducer = (state, action) => {
   switch (action.type) {
     case 'CHANGE':
       return { ...state, [action.field]: action.value }
@@ -19,22 +18,27 @@ const loginCredentialReducer = (state, action) => {
       return state
   }
 }
-const LoginPage = () => {
-  const router = useRouter()
-  const [setCredential, setCredentialDispatch] = useReducer(loginCredentialReducer, initialCredential)
 
-  const handleLogin = async () => {
-    const { name, password } = setCredential
+const register = () => {
+      const router = useRouter()
+  const [setCredential, setCredentialDispatch] = useReducer(registerCredentialReducer, initialCredential)
+
+  const handleRegister = async () => {
+    const { name, password, phone } = setCredential
 
     const body = {
       name,
       password,
+      role: '',
+      phone,
     }
+
+
 
     let message = ''
 
-    if (!name || !password) {
-      message = 'Harap isi Username dan Password.'
+    if (!name || !password || !phone) {
+      message = 'Harap isi Username, Password dan, Nomor Telfon .'
       toast(message, {
         style: {
           backgroundColor: '#ffa2a2',
@@ -46,11 +50,10 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, body)
-      if (res.data.status_code === 200) {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, body)
+      if (res.status === 201) {
         let message = res.data.message
-        localStorage.setItem('token', res.data.token)
-        localStorage.setItem('id_user', res.data.id_user)
+      
         toast(message, {
           style: {
             backgroundColor: '#b9f8cf',
@@ -58,15 +61,13 @@ const LoginPage = () => {
             border: '#05df72',
           },
         })
+
+           router.push('/login')
       }
 
-      if (res.data.role === 'admin') {
-        router.push('admin/dashboard')
-      } else {
-        router.push('/dashboard')
-      }
+ 
     } catch (error) {
-      let message = error.response.data.error
+      let message = error.response.data.message
       toast(message, {
         style: {
           backgroundColor: '#ffa2a2',
@@ -76,33 +77,10 @@ const LoginPage = () => {
       })
     }
   }
-
   return (
     <>
-      <div id="login-page">
+      <div id="register-page">
         <div className=" index-head h-100vh container-sm  d-flex flex-column justify-content-center align-items-center ">
-          <div>
-            <motion.div
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 25, opacity: 1 }}
-              transition={{
-                type: 'spring',
-                stiffness: 60,
-                damping: 12,
-                delay: 0.3,
-              }}
-            >
-              <div className="pb-4 content-wrapper flex flex-col justify-content-center align-items-center">
-                <Image
-                  src="/images/logo_tani.svg"
-                  alt="toko_tani.logo"
-                  width={200}
-                  height={200}
-                />
-              </div>
-            </motion.div>
-          </div>
-
           <div className="form-wrapper pt-5">
             <div>
               <Input
@@ -133,6 +111,20 @@ const LoginPage = () => {
                 placeholder="Password"
               />
             </div>
+            <div className="pt-3">
+              <Input
+                name="phone"
+                value={setCredential.phone}
+                onChange={(e) =>
+                  setCredentialDispatch({
+                    type: 'CHANGE',
+                    field: 'phone',
+                    value: e.target.value,
+                  })
+                }
+                placeholder="phone number"
+              />
+            </div>
           </div>
 
           <div
@@ -140,20 +132,11 @@ const LoginPage = () => {
             className="button-wrapper pt-3 d-flex flex-column gap-4"
           >
             <button
-              onClick={handleLogin}
+              onClick={handleRegister}
               className="py-2 px-4 border rounded-4 bg-softPrimary text-greenPrimary fw-700"
             >
-              Log in
+              Register Your Account
             </button>
-            <p>
-              <a
-                href="#"
-                className="link-underline-secondary "
-                onClick={() => router.push('/register')}
-              >
-                Create an account
-              </a>
-            </p>
           </div>
         </div>
       </div>
@@ -161,4 +144,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default register
