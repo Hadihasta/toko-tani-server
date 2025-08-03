@@ -3,11 +3,13 @@
 import { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import TableData from '@/components/login/tableData'
+import { useRouter } from 'next/navigation'
 
 const Dashboard = () => {
+  const router = useRouter()
   const [dataTable, setDataTable] = useState([])
   const [page, setPage] = useState(1)
-  const [limit] = useState(10) 
+  const [limit] = useState(10)
   const [totalPage, setTotalPage] = useState(1)
 
   const fetchCheckoutData = async (pageNumber = 1) => {
@@ -22,7 +24,6 @@ const Dashboard = () => {
 
       setDataTable(res.data.data)
       setTotalPage(res.data.pagination.totalPage)
-   
     } catch (error) {
       console.error('Gagal mengambil data:', error)
     }
@@ -54,7 +55,9 @@ const Dashboard = () => {
         >
           Previous
         </button>
-        <span className="mx-2">Page {page} of {totalPage}</span>
+        <span className="mx-2">
+          Page {page} of {totalPage}
+        </span>
         <button
           onClick={handleNextPage}
           disabled={page === totalPage}
@@ -62,6 +65,16 @@ const Dashboard = () => {
         >
           Next
         </button>
+      </div>
+    
+    <div className='d-flex justify-content-center '>
+      <a
+        href="#"
+        className="link-underline-secondary "
+        onClick={() => router.push('/admin/product')}
+      >
+        Tambah Product
+      </a>
       </div>
     </div>
   )
